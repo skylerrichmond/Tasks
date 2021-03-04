@@ -1,0 +1,2 @@
+setwd('C:\\Users\\Skyler Richmond\\Desktop\\Evolution\\Project\\Project\\')
+Data <- read.csv('data.csv', stringsAsFactors=F)
