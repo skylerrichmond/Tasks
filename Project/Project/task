@@ -1,0 +1,62 @@
+setwd('C:\\Users\\Skyler Richmond\\Desktop\\Evolution\\Project\\Project\\')
+Data <- read.csv('data.csv', stringsAsFactors=F)
+
+Surv <- Data[,7]
+Temp <- Data[,5]
+
+PercentHatching <- tapply(Surv, Temp, function(x) sum(x)/length(x))
+MeanHatching <- tapply(Surv, Temp, mean)
+SDHatching <- tapply(Surv,Temp,sd)
+Temps <- 1:3
+RealTemp <- c(11.4, 17.7, 24) # Actual temperature from the paper for treatments 1, 2, and 3 (cold, benign, hot)
+RealTemps <- RealTemp[Temp]
+TotalData <- cbind(RealTemp, PercentHatching)
+
+plot(as.numeric(names(MeanHatching)), MeanHatching, ylim=c(0,1))
+silent <- sapply(1:length(MeanHatching), function(x) segments(Temps[x], MeanHatching[x]-SDHatching[x], Temps[x], MeanHatching[x]+SDHatching[x]))
+
+# For data2
+Data <- read.csv('data2.csv', stringsAsFactors=F)
+Data2Temp <- 25 # Actual temperature the eggs in the Neither shcoked treatment from paper 2 were raised at
+NeitherShocked <- which(Data$Treatment == "Neither shocked")
+Hatching2 <- Data[NeitherShocked,5]
+SummaryData2 <- cbind(rep(Data2Temp, length(Hatching2)), Hatching2)
+TotalData <- rbind(TotalData, SummaryData2)
+
+# For data3
+Data <- read.csv('data3.csv', stringsAsFactors=F)
+Surv3<- Data[,3]
+Temp3<-Data[,1]
+head(Data)
+SummaryData3<-cbind(Temp3, Surv3)
+head(SummaryData3)
+TotalData <- rbind(TotalData, SummaryData3)
+
+#for data4
+Data <- read.table('data4.txt', sep="\t", stringsAsFactors=F, header=T)
+
+head(Data)
+SummaryData4<-cbind(Data[,1], Data[,3])
+TotalData <- rbind(TotalData, SummaryData4)
+head(SummaryData4)
+
+#For data5
+Data <- read.csv('data5.csv', stringsAsFactors=F)
+Surv5<- Data[,4]
+Temp5<-Data[,3]
+head(Data)
+SummaryData5<-cbind(Temp5, Surv5)
+TotalData <- rbind(TotalData, SummaryData5)
+
+#For data6
+Data <- read.csv('data6.csv', stringsAsFactors=F)
+Surv6<- Data[,12]
+Temp6<-Data[,1]
+head(Data)
+SummaryData6<-cbind(Temp6, Surv6)
+head(SummaryData6)
+TotalData <- rbind(TotalData, SummaryData6)
+
+
+plot(TotalData[,1], TotalData[,2], xlab="temperature", ylab="proportion hatching")
+abline(lm(TotalData[,2]~TotalData[,1]), col="black", lty=1)
