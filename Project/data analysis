@@ -1,4 +1,4 @@
-setwd('C:\\Users\\Skyler Richmond\\Desktop\\Evolution\\Project\\Project\\')
+setwd('C:\\Users\\Skyler Richmond\\Desktop\\Evolution\\Tasks\\Project\\Project\\')
 Data <- read.csv('data.csv', stringsAsFactors=F)
 
 Surv <- Data[,7]
@@ -59,24 +59,33 @@ TotalData <- rbind(TotalData, SummaryData6)
 
 
 plot(TotalData[,1], TotalData[,2], xlab="Temperature (Celsius)", ylab="Proportion hatching (%)")
-abline(lm(TotalData[,2]~TotalData[,1]), col="black", lty=1)
-MeanViability<-mean(Surv3, Surv6, Surv5, Hatching2)
-head(TotalData)
-MeanViability<-mean(PercentHatching)
+LM <- lm(TotalData[,2]~TotalData[,1])
+abline(LM, col="black", lty=1)
+summary(LM)
+
+legend("topleft", bty="n", legend=paste("r = ", round(LM$estimate), sep=""))
+
+MeanViability<-mean(TotalData[,2])
 head(MeanViability)
-SDViability<-sd(PercentHatching)
+SDViability<-sd(TotalData[,2])
 head(SDViability)
-ModeTemperature<-mode(RealTemp)
+ModeTemperature<-mode(TotalData[,1])
 head(ModeTemperature)
-AverageTemperature<-mean(RealTemp)
-head(AverageTemperature)
+
+CTest <- cor.test(TotalData[,1], TotalData[,2])
+
+ViabilityANOVA <- aov(TotalData[,1] ~ TotalData[,2])
+
+boxplot( TotalData[,2] ~ TotalData[,1], xlab="Temperature", ylab= "Percent Hatching" )
+
+legend("topleft", bty="n", legend=paste("r = ", round(CTest$estimate), sep=""))
+
+par(las=1, mar=c(5, 5, 1, 1), mgp=c(2, 0.5, 0), tck=-0.01 )
+
+boxplot
 
 install.packages("ggpubr")
 library(ggpubr)
-ggscatter(TotalData, x = "RealTemp", y = "PercentHatching", 
-          add = "reg.line", conf.int = TRUE, 
-          cor.coef = TRUE, cor.method = "pearson",
-          xlab = "Temperature (Celsius)", ylab = "Proportion hatching (%)")
-linearMod<-lm()
-summary(linearMod)
-lm(formula=)
+library(tidyverse)
+library(broom)
+library(AICcmodavg)
